@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>For My Love ❤️</title>
+
+    <style>
+        body {
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            color: white;
+        }
+
+        .container {
+            margin-top: 10px;
+        }
+
+        .img-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        img {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            box-shadow: 0 0 25px rgba(255,255,255,0.8);
+            filter: brightness(1.1) contrast(1.2);
+            transition: transform 0.5s;
+        }
+
+        img:hover {
+            transform: scale(1.08);
+        }
+
+        h1 {
+            margin-top: 5px;
+            font-size: 36px;
+            animation: glow 5s infinite;
+        }
+
+        p {
+            font-size: 20px;
+            width: 70%;
+            margin: auto;
+            line-height: 1.5;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px white; }
+            50% { text-shadow: 0 0 20px pink; }
+            100% { text-shadow: 0 0 10px white; }
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .heart {
+            position: fixed;
+            top: -10px;
+            font-size: 20px;
+            animation: fall linear infinite;
+            color: pink;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        #musicBtn {
+            margin-top: 20px;
+            padding: 10px 22px;
+            font-size: 17px;
+            border: none;
+            border-radius: 30px;
+            background: white;
+            color: #ff4d6d;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255,255,255,0.8);
+            transition: transform 0.3s;
+        }
+
+        #musicBtn:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes gentleShake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(1deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-1deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .shake {
+            animation: gentleShake 0.6s infinite;
+        }
+
+        .glow-bg {
+            box-shadow: inset 0 0 100px rgba(255,182,193,0.5);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>For My Love 💕</h1>
+    </div>
+
+    <div class="img-container">
+        <img src="{{ url_for('static', filename='love.jpeg') }}">
+    </div>
+
+    <!-- Background music (NO autoplay) -->
+    <audio id="bgMusic"></audio>
+
+
+
+    <button id="musicBtn" onclick="playMusic()">▶ Play Our Song 🎶</button>
+
+    <p id="songName" style="margin-top:12px; font-size:18px; opacity:0.9;"></p>
+
+    <p id="musicMsg" style="margin-top:15px; font-size:22px; display:none;">
+        This song reminds me of you ❤️
+    </p>
+
+    <h1>My Love, My Hero ❤️</h1>
+
+    <p>
+        Every time I see you, my heart smiles.  
+        Your eyes, your strength, your presence — everything about you
+        makes my world brighter.  
+        You are my happiness, my peace, and my forever.  
+    </p>
+
+    <footer>
+        With all my love 💕  
+        — Yours always
+    </footer>
+
+    <!-- Floating hearts -->
+    <script>
+        setInterval(() => {
+            let heart = document.createElement("div");
+            heart.className = "heart";
+            heart.innerHTML = "❤️";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (2 + Math.random() * 3) + "s";
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 5000);
+        }, 300);
+    </script>
+
+    <!-- Music control logic -->
+    <script>
+    const music = document.getElementById("bgMusic");
+    const btn = document.getElementById("musicBtn");
+    const songName = document.getElementById("songName");
+    const musicMsg = document.getElementById("musicMsg");
+
+    let isLoaded = false;
+
+    function playMusic() {
+        if (!isLoaded) {
+            music.src = "{{ url_for('static', filename='love.mp3') }}";
+            music.load();
+            isLoaded = true;
+        }
+
+        if (music.paused) {
+            music.play();
+            btn.innerHTML = "⏸ Pause Our Song 💕";
+            btn.classList.add("shake");
+            songName.innerHTML = "🎶 UN KANGAL IRANDAL";
+            musicMsg.style.display = "block";
+            document.body.classList.add("glow-bg");
+        } else {
+            music.pause();
+            btn.innerHTML = "▶ Play Our Song 🎶";
+            btn.classList.remove("shake");
+            musicMsg.style.display = "none";
+            document.body.classList.remove("glow-bg");
+        }
+    }
+</script>
+
+
+</body>
+</html>
