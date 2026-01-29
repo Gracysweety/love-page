@@ -3,29 +3,41 @@
 <head>
     <title>For My Love ❤️</title>
 
+    <!-- IMPORTANT for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         body {
+            margin: 0;
+            min-height: 100vh;
             background: linear-gradient(to right, #ff758c, #ff7eb3);
             font-family: 'Segoe UI', sans-serif;
             text-align: center;
             color: white;
+            display: flex;
+            justify-content: center;
         }
 
         .container {
-            margin-top: 10px;
+            width: 100%;
+            max-width: 600px;
+            padding: 15px 15px 30px;
+            box-sizing: border-box;
         }
 
         .img-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 10px 0;
+            margin: 15px 0 20px;
         }
 
         img {
-            width: 280px;
-            height: 280px;
+            width: 70vw;
+            max-width: 280px;
+            aspect-ratio: 1 / 1;
             border-radius: 50%;
+            object-fit: cover;
             box-shadow: 0 0 25px rgba(255,255,255,0.8);
             filter: brightness(1.1) contrast(1.2);
             transition: transform 0.5s;
@@ -36,28 +48,29 @@
         }
 
         h1 {
-            margin-top: 5px;
+            margin: 10px 0;
             font-size: 36px;
             animation: glow 5s infinite;
         }
 
         p {
             font-size: 20px;
-            width: 70%;
-            margin: auto;
+            width: 100%;
+            max-width: 500px;
+            margin: 12px auto;
             line-height: 1.5;
-        }
-
-        @keyframes glow {
-            0% { text-shadow: 0 0 10px white; }
-            50% { text-shadow: 0 0 20px pink; }
-            100% { text-shadow: 0 0 10px white; }
         }
 
         footer {
             margin-top: 20px;
             font-size: 18px;
             opacity: 0.9;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px white; }
+            50% { text-shadow: 0 0 20px pink; }
+            100% { text-shadow: 0 0 10px white; }
         }
 
         .heart {
@@ -107,45 +120,60 @@
         .glow-bg {
             box-shadow: inset 0 0 100px rgba(255,182,193,0.5);
         }
+
+        /* Mobile fine-tuning */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            footer {
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
     <div class="container">
+
         <h1>For My Love 💕</h1>
+
+        <div class="img-container">
+            <img src="{{ url_for('static', filename='love.jpeg') }}">
+        </div>
+
+        <!-- Background music -->
+        <audio id="bgMusic"></audio>
+
+        <button id="musicBtn" onclick="playMusic()">▶ Play Our Song 🎶</button>
+
+        <p id="songName" style="margin-top:12px; font-size:18px; opacity:0.9;"></p>
+
+        <p id="musicMsg" style="margin-top:15px; font-size:22px; display:none;">
+            This song reminds me of you ❤️
+        </p>
+
+        <h1>My Love, My Hero ❤️</h1>
+
+        <p>
+            Every time I see you, my heart smiles.  
+            Your eyes, your strength, your presence — everything about you
+            makes my world brighter.  
+            You are my happiness, my peace, and my forever.  
+        </p>
+
+        <footer>
+            With all my love 💕  
+            — Yours always
+        </footer>
+
     </div>
-
-    <div class="img-container">
-        <img src="{{ url_for('static', filename='love.jpeg') }}">
-    </div>
-
-    <!-- Background music (NO autoplay) -->
-    <audio id="bgMusic"></audio>
-
-
-
-    <button id="musicBtn" onclick="playMusic()">▶ Play Our Song 🎶</button>
-
-    <p id="songName" style="margin-top:12px; font-size:18px; opacity:0.9;"></p>
-
-    <p id="musicMsg" style="margin-top:15px; font-size:22px; display:none;">
-        This song reminds me of you ❤️
-    </p>
-
-    <h1>My Love, My Hero ❤️</h1>
-
-    <p>
-        Every time I see you, my heart smiles.  
-        Your eyes, your strength, your presence — everything about you
-        makes my world brighter.  
-        You are my happiness, my peace, and my forever.  
-    </p>
-
-    <footer>
-        With all my love 💕  
-        — Yours always
-    </footer>
 
     <!-- Floating hearts -->
     <script>
@@ -156,44 +184,42 @@
             heart.style.left = Math.random() * 100 + "vw";
             heart.style.animationDuration = (2 + Math.random() * 3) + "s";
             document.body.appendChild(heart);
-
             setTimeout(() => heart.remove(), 5000);
         }, 300);
     </script>
 
-    <!-- Music control logic -->
+    <!-- Music control -->
     <script>
-    const music = document.getElementById("bgMusic");
-    const btn = document.getElementById("musicBtn");
-    const songName = document.getElementById("songName");
-    const musicMsg = document.getElementById("musicMsg");
+        const music = document.getElementById("bgMusic");
+        const btn = document.getElementById("musicBtn");
+        const songName = document.getElementById("songName");
+        const musicMsg = document.getElementById("musicMsg");
 
-    let isLoaded = false;
+        let isLoaded = false;
 
-    function playMusic() {
-        if (!isLoaded) {
-            music.src = "{{ url_for('static', filename='love.mp3') }}";
-            music.load();
-            isLoaded = true;
+        function playMusic() {
+            if (!isLoaded) {
+                music.src = "{{ url_for('static', filename='love.mp3') }}";
+                music.load();
+                isLoaded = true;
+            }
+
+            if (music.paused) {
+                music.play();
+                btn.innerHTML = "⏸ Pause Our Song 💕";
+                btn.classList.add("shake");
+                songName.innerHTML = "🎶 UN KANGAL IRANDAL";
+                musicMsg.style.display = "block";
+                document.body.classList.add("glow-bg");
+            } else {
+                music.pause();
+                btn.innerHTML = "▶ Play Our Song 🎶";
+                btn.classList.remove("shake");
+                musicMsg.style.display = "none";
+                document.body.classList.remove("glow-bg");
+            }
         }
-
-        if (music.paused) {
-            music.play();
-            btn.innerHTML = "⏸ Pause Our Song 💕";
-            btn.classList.add("shake");
-            songName.innerHTML = "🎶 UN KANGAL IRANDAL";
-            musicMsg.style.display = "block";
-            document.body.classList.add("glow-bg");
-        } else {
-            music.pause();
-            btn.innerHTML = "▶ Play Our Song 🎶";
-            btn.classList.remove("shake");
-            musicMsg.style.display = "none";
-            document.body.classList.remove("glow-bg");
-        }
-    }
-</script>
-
+    </script>
 
 </body>
 </html>
